@@ -3,12 +3,17 @@ let fs = require("fs");
 // npm 
 let request = require("request");
 let cheerio = require("cheerio");
-let url = "https://www.espncricinfo.com/series/8048/scorecard/1181768/mumbai-indians-vs-chennai-super-kings-final-indian-premier-league-2019";
+// let url = "https://www.espncricinfo.com/series/8048/scorecard/1181768/mumbai-indians-vs-chennai-super-kings-final-indian-premier-league-2019";
 // html parsing , extract data
 // to manipluate excel 
 // will request for page from cricinfo server
-request(url, cb);
-console.log("Before");
+function scrapAMatch(url) {
+
+    request(url, cb);
+
+}
+
+// console.log("Before");
 function cb(err, header, body) {
 
     if (err == null && header.statusCode == 200) {
@@ -65,6 +70,7 @@ function processMatch(html) {
 
 
     }
+    console.log("###############################");
     // fs.writeFileSync("innings.html", bothInnings);
 
     // console.log("File saved");
@@ -75,9 +81,9 @@ function processMatch(html) {
     // team ,player Name, runs, balls,sr,opponent
     //  send the data to a fn that add the extracted data to excel
 }
-
-
 // later 
 function processPlayer(details) {
     // will save the data to file system
 }
+module.exports.childFn = scrapAMatch;
+// module.exports.val=4;
