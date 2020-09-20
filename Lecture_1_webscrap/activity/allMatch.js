@@ -4,16 +4,17 @@ let fs = require("fs");
 // npm 
 let cheerio = require("cheerio");
 let request = require("request");
-
 // to import code from any other file
 
 let match = require("./match");
 console.log(match);
-let url = "https://www.espncricinfo.com/scores/series/8048/season/2019/indian-premier-league?view=results";
 // html parsing , extract data
 // to manipluate excel 
 // will request for page from cricinfo server
-request(url, cb);
+function allMatchHandler(url) {
+
+    request(url, cb);
+}
 console.log("Before");
 function cb(err, header, body) {
 
@@ -37,10 +38,9 @@ function processMatch(html) {
     for (let i = 0; i < allElem.length; i++) {
         let link = ch(allElem[i]).find("a[data-hover='Scorecard']").attr("href");
         let fullLink = "https://www.espncricinfo.com" + link;
-        console.log(fullLink);
+        // console.log(fullLink);
         match.childFn(fullLink);
         // empty object
-
     }
     // let allAELem = ch("a[data-hover='Scorecard']")
     // for (let i = 0; i < allAELem.length; i++) {
@@ -51,3 +51,4 @@ function processMatch(html) {
     // console.log(allCards.length);
     //  give command match.js
 }
+module.exports.allMatchHandler = allMatchHandler;

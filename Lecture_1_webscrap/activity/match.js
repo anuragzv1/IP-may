@@ -1,23 +1,28 @@
 // const { head } = require("request");
+// node core modules
 let fs = require("fs");
+let path = require("path");
 // npm 
+// request
 let request = require("request");
+// parsing
 let cheerio = require("cheerio");
+// excel
+let xlsx = require("xlsx");
 // let url = "https://www.espncricinfo.com/series/8048/scorecard/1181768/mumbai-indians-vs-chennai-super-kings-final-indian-premier-league-2019";
 // html parsing , extract data
 // to manipluate excel 
 // will request for page from cricinfo server
 function scrapAMatch(url) {
-
+    // async function=> parallel work
     request(url, cb);
 
 }
-
 // console.log("Before");
 function cb(err, header, body) {
 
     if (err == null && header.statusCode == 200) {
-        console.log("Recieved resp");
+        // console.log("Recieved resp");
         // console.log(body);
         processMatch(body);
         // fs.writeFileSync("file.html",body);
@@ -32,9 +37,10 @@ function cb(err, header, body) {
 function processMatch(html) {
     // parse
     let ch = cheerio.load(html);
-    // let detailsElement = ch(".desc.text-truncate");
+    let detailsElement = ch(".desc.text-truncate");
     // .card.content-block.match-scorecard-table .Collapsible
     // innings
+    // console.log(detailsElement.text());
     let bothInnings = ch(".card.content-block.match-scorecard-table .Collapsible");
     //  inning loop 
     for (let i = 0; i < bothInnings.length; i++) {
@@ -55,7 +61,8 @@ function processMatch(html) {
                 let fours = ch(ch(allRows[j]).find("td")[5]).text();
                 let sixes = ch(ch(allRows[j]).find("td")[6]).text();
                 let sr = ch(ch(allRows[j]).find("td")[7]).text();
-                console.log(`${teamName} ${pName} ${runs} ${balls} ${fours} ${sixes} ${sr}`)
+                // console.log(`${teamName} ${pName} ${runs} ${balls} ${fours} ${sixes} ${sr}`)
+                processPlayer(teamName, pName, runs, balls, sixes, fours, sr);
                 // get details of a batsman
                 // console.log(pName);
             }
@@ -64,13 +71,13 @@ function processMatch(html) {
         // console.log(noBatsman);
         //    let arrofString= teamName.
         //    console.log(arrofString);
-        console.log("```````````````````````````");
-        console.log(teamName);
+        // console.log("```````````````````````````");
+        // console.log(teamName);
         // get data of batsman of that team 
 
 
     }
-    console.log("###############################");
+    // console.log("###############################");
     // fs.writeFileSync("innings.html", bothInnings);
 
     // console.log("File saved");
@@ -81,9 +88,51 @@ function processMatch(html) {
     // team ,player Name, runs, balls,sr,opponent
     //  send the data to a fn that add the extracted data to excel
 }
-// later 
-function processPlayer(details) {
-    // will save the data to file system
+function excelReader(filePath, name) {
+    if (!fs.existsSync(filePath)) {
+        return null;
+    }
+    // workbook => excel
+    let wt = xlsx.readFile(filePath);
+    // get data from workbook
+    let excelData = wt.Sheets[name];
+    // convert excel format to json => array of obj
+    let ans = xlsx.utils.sheet_to_json(excelData);
+    // console.log(ans);
+    return ans;
 }
+function excelWriter(filePath, json, name) {
+    // console.log(xlsx.readFile(filePath));
+    var newWB = xlsx.utils.book_new();
+    // console.log(json);
+    var newWS = xlsx.utils.json_to_sheet(json)
+    xlsx.utils.book_append_sheet(newWB, newWS, name)//workbook name as param
+    xlsx.writeFile(newWB, filePath);
+}
+// add data to file system
+function processPlayer(team, name, runs, balls, sixes, fours, sr) {
+    //    directory exist
+    // [{},{}]
+    let obj = {
+        runs, balls, fours, sixes, sr, team
+    };
+    let teamPath = team;
+    // check if dir name Mumbai indian exist
+    if (!fs.existsSync(teamPath)) {
+        fs.mkdirSync(teamPath);
+    }
+    // Mumbai Indians/RSharma.xlsx
+    let playerFile = path.join(teamPath, name) + '.xlsx';
+    // excel code read => no file
+    let fileData = excelReader(playerFile, name);
+    let json = fileData;
+    if (fileData == null) {
+        json = [];
+    }
+    json.push(obj);
+    // excel write
+    excelWriter(playerFile, json, name);
+}
+
 module.exports.childFn = scrapAMatch;
 // module.exports.val=4;
