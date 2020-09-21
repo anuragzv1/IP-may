@@ -9,3 +9,8 @@
 ### WebScrapping
 * Cheerio: http://zetcode.com/javascript/cheerio/
 * https://www.npmjs.com/package/cheerio
+### Excel clone
+* Css video :https://www.youtube.com/playlist?list=PL-Jc9J83PIiEeD3I4VXETPDmzJ3Z1rWb4
+* Getting started with Electron: https://www.electronjs.org/docs/tutorial/first-app#running-your-app
+* Jquery videos: https://www.youtube.com/playlist?list=PL4cUxeGkcC9hNUJ0j6ccnOAcJIPoTRpO4
+* FlexBox https://www.freecodecamp.org/news/flexbox-the-ultimate-css-flex-cheatsheet/
