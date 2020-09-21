@@ -25,21 +25,22 @@ fs.readFile("f1.txt", function (err, data) {
         })
     }
 })
+
 // Parallel
-fs.readFile("f1.txt", function (err, data) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("Data is " + data);
+// fs.readFile("f1.txt", function (err, data) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log("Data is " + data);
         
-    }
-})
+//     }
+// })
 
-fs.readFile("f2.txt", function (err, data) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("Data is " + data);
+// fs.readFile("f2.txt", function (err, data) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log("Data is " + data);
 
-    }
-})
+//     }
+// })
