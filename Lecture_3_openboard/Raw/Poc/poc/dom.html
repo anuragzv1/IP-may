@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" name="" id="">
+    <button>click</button>
+    <ul>
+
+    </ul>
+    <script>
+        let d = document;
+        let input = d.querySelector("input");
+        let button = d.querySelector("button");
+        let ul = d.querySelector("ul");
+        button.addEventListener("click", function () {
+            let text = input.value;
+            console.log(text);
+            // create node
+            let li = d.createElement("li");
+            // properties update
+            li.innerText = text;
+            // dom tree add
+            ul.appendChild(li);
+            input.value="";
+
+        })
+    </script>
+</body>
+
+</html>

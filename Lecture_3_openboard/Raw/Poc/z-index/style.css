@@ -1,0 +1,39 @@
+/* default styling */
+*{
+    box-sizing: border-box;
+}
+html{
+margin:0px;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color:rgb(170, 130, 209);
+color:white;
+}
+h1{
+    text-align: center;
+}
+.parent{
+    border:1px solid;
+    position: relative;  
+}
+.box{
+    border:1px solid ;
+    width:150px;
+    height:100px;
+}
+.first{
+    background-color:lightskyblue;
+}
+.second{
+    background-color: rgba(146, 235, 146, 0.747);
+    position: absolute;
+    top:0px;
+    left:40px;
+    
+   
+}
+.third{
+    
+    position: absolute;
+    top:0px;
+    left:150px;
+}

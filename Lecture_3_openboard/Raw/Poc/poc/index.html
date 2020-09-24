@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .tool-panel {
+        height: 20vh;
+    }
+
+    .tools {
+        height: 100%;
+        display: flex;
+    }
+
+    .tool {
+        height: 100%;
+    }
+
+    .img {
+        height: 60%;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="tool-panel">
+        <div class="tools">
+            <div class="tool">
+                <img src="./NewIcons/Black_Pencil.svg" class="img" alt="">
+                <div class="tool-options"></div>
+            </div>
+            <div class="tool">
+                <img src="./NewIcons/Eraser.svg" class="img" alt="">
+                <div class="tool-options"></div>
+            </div>
+            <div class="tool">
+                <img src="./NewIcons/Undo.svg" class="img undo" alt="">
+                <div class="tool-options"></div>
+            </div>
+        </div>
+    </div>
+    <canvas class="board"></canvas>
+</body>
+
+<script>
+    //document represents the curent loaded page in the browser
+    let board = document.querySelector(".board");
+    let undo = document.querySelector(".undo");
+    board.height = window.innerHeight;
+    board.width = window.innerWidth;
+    // 2d => tool to render on 2d , 3d,webGl
+    // canvasRenderingContext2d
+    // you an object that is used to draw on canvas
+    let ctx = board.getContext('2d');
+    // by default color of ctx is black 
+    // ctx.fillStyle = 'rgb(0, 0, 0)';
+    // type set 
+    ctx.fillStyle = "red";
+    // // rect draw command
+    // ctx.fillRect(0, 0, board.width/2, board.height/2);
+    // get the tool
+    // proprties
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "green";
+    ctx.lineWidth = 10;
+    // start drawing a path
+    // // these coordinates are respective to canvas
+    // ctx.beginPath();
+    // // first Line
+    // ctx.moveTo(100, 150);
+    // ctx.lineTo(100, 300);
+    // // second line
+    // ctx.lineTo(300, 300);
+    // // ctx.moveTo(200,200);
+    // // ctx.lineTo(350,200);
+    // // ctx.closePath();
+    // // path will be rendered here 
+    // ctx.fill();
+    // ctx.stroke();
+
+    // these coordinates are resepctive to the html page
+    // ***********addEventListener********
+    let isMouseDown = false;
+    let undoStack = []
+    // *********************Drawing***********************
+    board.addEventListener("mousedown", function (e) {
+        // console.log("Board was clicked");
+        // console.log();
+        let x = e.clientX;
+        let y = e.clientY - getBound();
+        isMouseDown = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        let point = {
+            x, y, type: "md", color: ctx.strokeStyle,
+            width: ctx.lineWidth
+        }
+        undoStack.push(point);
+    })
+    board.addEventListener("mousemove", function (e) {
+        // console.log("Board was clicked");
+        // console.log();
+        let x = e.clientX;
+        let y = e.clientY - getBound();
+
+        if (isMouseDown) {
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            let point = {
+                x, y, type: "mm", color: ctx.strokeStyle,
+                width: ctx.lineWidth
+            }
+            undoStack.push(point);
+
+        }
+    })
+    board.addEventListener("mouseup", function (e) {
+        // console.log("Board was clicked");
+        // console.log();
+        isMouseDown = false;
+    })
+    board.addEventListener("mouseleave", function (e) {
+        // console.log("Board was clicked");
+        // console.log();
+        isMouseDown = false;
+    })
+
+    let ref;
+    undo.addEventListener("mousedown", function () {
+        let fn = function () {
+            if (undoStack.length > 0) {
+                undoStack.pop();
+                redraw();
+            }
+        }
+        ref = setInterval(fn, 100);
+    })
+    undo.addEventListener("mouseup", function () {
+        clearInterval(ref);
+    })
+
+    function redraw() {
+        // clear screen
+        ctx.clearRect(0, 0, board.width, board.height)
+
+        for (let i = 0; i < undoStack.length; i++) {
+
+            let { x, y, color, width, type } = undoStack[i];
+            ctx.strokeStyle = color;
+            color.lineWidth = width;
+            if (type == "md") {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            } else if (type == "mm") {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        }
+    }
+    function getBound() {
+        let obj = board.getBoundingClientRect();
+        // console.log(obj);
+        return obj.top;
+    }
+
+</script>
+
+</html>

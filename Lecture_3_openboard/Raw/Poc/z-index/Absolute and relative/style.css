@@ -1,0 +1,43 @@
+/* default styling */
+*{
+    box-sizing: border-box;
+}
+html{
+margin:0px;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color:rgb(170, 130, 209);
+color:white;
+}
+h1{
+    text-align: center;
+}
+.parent{
+    border:1px solid;
+    position: relative;  
+}
+.box{
+    border:1px solid ;
+    width:150px;
+    height:100px;
+}
+.first{
+    background-color:lightskyblue;
+}
+.second{
+    background-color: lightgreen;
+    /* /* it still occupies it's original pos
+   position: relative;
+   left:150px;
+   bottom: 100px;; */
+
+   /* position: absolute;
+   left:150px;
+   bottom: 100px;  */
+    
+}
+.third{
+    background-color: lightpink;
+    /* position: static; */
+}
+/* normal flow=> top-bottom ,left-right */
+/* position: static ,relative,absolute,fixed,sticky */
